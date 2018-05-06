@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.entity.Student" table="t_stu">
+		<id name="id" column="id">
+			<generator class="native"></generator>
+		</id>
+		<property name="sid" column="sid"></property>
+		<property name="sname" column="sname"></property>
+		<property name="ssex" column="ssex"></property>
+		<property name="sage" column="sage"></property>
+		<property name="sclass" column="sclass"></property>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.multipart.saveDir" value="/tmp"/>
+	<package name="login" extends="struts-default" namespace="/">
+	<action name="*_*" class="com.action.{1}Action" method="{2}">
+		<result name="loginsuccess">/index.jsp</result>
+		<result name="input">/Login.jsp</result>
+		<result name="login" type="redirect">/Login.jsp</result>
+	</action>
+	</package>
+	<package name="student" namespace="/student" extends="struts-default">
+	<interceptors>
+	<interceptor name="auth" class="interceptor.LoginInterceptor"></interceptor>
+	<interceptor-stack name="myStack">
+		<interceptor-ref name="auth"></interceptor-ref>
+		<interceptor-ref name="defaultStack"></interceptor-ref>
+	</interceptor-stack>
+	</interceptors>
+		<action name="*_*" class="com.action.{1}Action" method="{2}">
+			<result name="noLogin">/NoLogin.jsp</result>	
+			<result name="query_success">/QueryAll.jsp</result>
+			<result name="delete_success" type="chain">Student_queryAll</result>
+			<result name="add_success">/Add_success.jsp</result>
+			<result name="add_failure">/AddFailure.jsp</result>
+			<result name="update1_success">/Update.jsp</result>
+			<result name="update2_success">/Update_success.jsp</result>
+			<result name="queryByCon_success">/QueryByCon_success.jsp</result>
+			<result name="import_success">/Import_success.jsp</result>
+			<interceptor-ref name="myStack"></interceptor-ref>
+		</action>
+	</package>
+	
+</struts>
