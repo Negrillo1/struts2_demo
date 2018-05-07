@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                     <a href="QueryByCon.jsp" target="contents">按条件查询</a>
                                 </li>
                                 <li data-options="iconCls:'icon-group_edit'">
-                                    <a href="AddStudent.jsp" target="contents">添加用户</a>
+                                    <a href="student/Student_AddStudent" target="contents">添加用户</a>
                                 </li>
                             </ul>
                         </li>

@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -81,10 +82,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <input class="easyui-numberbox" min="16" max="26" name="sage" required="true" label="年龄：" labelPosition="top" data-options="prompt:'年龄'" missingMessage="必须填写16~26的整数" style="width:100%;height:52px">
             </div>
 			<div class="input_container">
-                <input class="easyui-textbox" name="sclass" label="班级：" required="true" labelPosition="top" data-options="prompt:'班级'" style="width:100%;height:52px" missingMessage="必须填写班级">
+			学院：<br/>
+                <select class="easyui-combobox" style="width: 150px;" name="sclass">
+				<c:forEach items="${c_name_list }" var="c_name">
+					<option value="${c_name.id }">${c_name.c_name }</option>
+				</c:forEach>
+			</select>
             </div>
-            <div>
-                <input type="submit" value="提交"/>
+            <div style="width: 250px; margin: auto;">
+                <input type="submit" value="提交" style="width: 250px;"/>
             </div> 
     	</div>
     </form>

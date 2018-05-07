@@ -17,6 +17,7 @@ import utils.ExcelExportUtils;
 
 import com.dao.StudentDao;
 import com.dao.StudentDaoImpl;
+import com.entity.Classes;
 import com.entity.PageBean;
 import com.entity.Student;
 import com.opensymphony.xwork2.ActionContext;
@@ -27,6 +28,7 @@ public class StudentAction extends SuperAction{
 	private ExcelExportUtils excelExportUtils = new ExcelExportUtils();
 	private int id;
 	private Student s;
+	private Classes c = new Classes();
 	private File file;
 	public File getFile() {
 		return file;
@@ -88,7 +90,6 @@ public class StudentAction extends SuperAction{
 		int ps = 3;
 		StudentDao sdao = new StudentDaoImpl();
 		PageBean<Student> pb = sdao.queryAll(pc,ps);
-		
 		session.setAttribute("pb", pb);
 		
 		return "query_success";
@@ -131,7 +132,8 @@ public class StudentAction extends SuperAction{
 		s.setSname(request.getParameter("sname"));
 		s.setSsex(request.getParameter("ssex"));
 		s.setSage(request.getParameter("sage"));
-		s.setSclass(request.getParameter("sclass"));
+		c.setId(request.getParameter("sclass"));
+		s.setClasses(c);
 		StudentDao sdao = new StudentDaoImpl();
 		if(sdao.addStudent(s)) {
 			return "add_success";
@@ -164,7 +166,6 @@ public class StudentAction extends SuperAction{
 		s.setSname(request.getParameter("sname"));
 		s.setSsex(request.getParameter("ssex"));
 		s.setSage(request.getParameter("sage"));
-		s.setSclass(request.getParameter("sclass"));
 		if(sdao.updateStudent(s)) {
 			return "update2_success";
 		}
@@ -184,7 +185,6 @@ public class StudentAction extends SuperAction{
 		s.setSsex(request.getParameter("ssex"));
 		System.out.println(request.getParameter("ssex"));
 		s.setSage(request.getParameter("sage"));
-		s.setSclass(request.getParameter("sclass"));
 //		s = encoding(s);
 		PageBean<Student> pb = sdao.query(s,pc,ps);
 		pb.setUrl(getUrl(request));
@@ -204,7 +204,7 @@ public class StudentAction extends SuperAction{
 		String sname = s2.getSname();
 		String ssex = s2.getSsex();
 		String sage = s2.getSage();
-		String sclass = s2.getSclass();
+		
 		
 		if(sid != null && !sid.trim().isEmpty()) {
 			sid = new String (sid.getBytes("ISO-8859-1"),"utf-8");
@@ -222,10 +222,6 @@ public class StudentAction extends SuperAction{
 		if(sage != null && !sage.trim().isEmpty()) {
 			sage = new String (sage.getBytes("ISO-8859-1"),"utf-8");
 			s2.setSage(sage);
-		}
-		if(sclass != null && !sclass.trim().isEmpty()) {
-			sclass = new String (sclass.getBytes("ISO-8859-1"),"utf-8");
-			s2.setSclass(sclass);
 		}
 		return s2;
 	}
@@ -336,8 +332,8 @@ public class StudentAction extends SuperAction{
 						stu.setSsex(s.getSsex());
 						if(s.getSage() != null)
 						stu.setSage(s.getSage());
-						if(s.getSclass() != null)
-						stu.setSclass(s.getSclass());
+/*						if(s.getSclass() != null)
+						stu.setSclass(s.getSclass());*/
 						sdao.addStudent(stu);
 					}
 				}
@@ -348,5 +344,12 @@ public class StudentAction extends SuperAction{
 			e.printStackTrace();
 		}
 		return "import_success";
+	}
+	public String AddStudent() {
+		
+		StudentDao dao = new StudentDaoImpl();
+		List<Classes> list = dao.getClassList();
+		session.setAttribute("c_name_list", list);
+		return "AddStudent";
 	}
 }

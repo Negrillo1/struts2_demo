@@ -11,7 +11,8 @@ public class Student {
 	private String sname;
 	private String ssex;
 	private String sage;
-	private String sclass;
+	
+	private Classes classes;
 	public int getId() {
 		return id;
 	}
@@ -41,17 +42,12 @@ public class Student {
 	}
 	public void setSage(String sage) {
 		this.sage = sage;
+	}	
+	public Classes getClasses() {
+		return classes;
 	}
-	public String getSclass() {
-		return sclass;
-	}
-	public void setSclass(String sclass) {
-		this.sclass = sclass;
-	}
-	@Override
-	public String toString() {
-		return "Student [sid=" + sid + ", sname=" + sname + ", ssex=" + ssex + ", sage=" + sage + ", sclass=" + sclass
-				+ "]";
+	public void setClasses(Classes classes) {
+		this.classes = classes;
 	}
 	
 }

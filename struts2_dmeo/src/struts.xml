@@ -30,6 +30,7 @@
 			<result name="update2_success">/Update_success.jsp</result>
 			<result name="queryByCon_success">/QueryByCon_success.jsp</result>
 			<result name="import_success">/Import_success.jsp</result>
+			<result name="AddStudent">/AddStudent.jsp</result>
 			<interceptor-ref name="myStack"></interceptor-ref>
 		</action>
 	</package>

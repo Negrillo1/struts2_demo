@@ -33,22 +33,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             data-options="url:'datagrid_data1.json',method:'get',border:false,singleSelect:true,fit:true,fitColumns:true">
             <thead>
                 <tr>
-                    <th data-options="field:'sid'" width="18%">学号</th>
-                    <th data-options="field:'sname'" width="18%">姓名</th>
-                    <th data-options="field:'ssex'" width="18%">性别</th>
-                    <th data-options="field:'sage'" width="18%">年龄</th>
-                    <th data-options="field:'sclass'" width="18%">班级</th>
-                    <th data-options="field:'operate'" width="18%">操作</th>
+                    <th data-options="field:'sid'" width="17%">学号</th>
+                    <th data-options="field:'sname'" width="17%">姓名</th>
+                    <th data-options="field:'ssex'" width="17%">性别</th>
+                    <th data-options="field:'sage'" width="17%">年龄</th> 
+                    <th data-options="field:'demp'" width="17%">学院</th>
+                    <th data-options="field:'operate'" width="17%">操作</th>
                 </tr>
             </thead>
 			<s:iterator value="#session.pb.beanList" var="stu">
 				<tr>
-            		<td align="center"><s:property value="#stu.sid"/></td>
+            		<td align="center"><s:property value="#stu.sid"/></td>							
             		<td align="center"><s:property value="#stu.sname"/></td>
             		<td align="center"><s:property value="#stu.ssex"/></td>
             		<td align="center"><s:property value="#stu.sage"/></td>
-            		<td align="center"><s:property value="#stu.sclass"/></td>
-            		<td align="center">
+            		<td align="center"><s:property value="#stu.classes.c_name"/></td>
+            		<td>
             		<a href="<%=path%>/student/Student_delete.action?id=<s:property value="#stu.id"/>" onclick="javascript:return confirm('确定删除？');">删除</a>
             		<a href="<%=path%>/student/Student_update1.action?id=<s:property value="#stu.id"/>">修改</a>
             		</td>

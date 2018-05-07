@@ -11,6 +11,6 @@
 		<property name="sname" column="sname"></property>
 		<property name="ssex" column="ssex"></property>
 		<property name="sage" column="sage"></property>
-		<property name="sclass" column="sclass"></property>
+		<many-to-one name="classes" class="com.entity.Classes" column="class_fk" fetch="join" lazy="false"></many-to-one>
 	</class>
 </hibernate-mapping>

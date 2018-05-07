@@ -13,5 +13,6 @@
    		<property name="format_sql">true</property>
    		<mapping resource="com/entity/User.hbm.xml"/>
    		<mapping resource="com/entity/Student.hbm.xml"/>
+   		<mapping resource="com/entity/Classes.hbm.xml"/>
    	</session-factory>	
    </hibernate-configuration>

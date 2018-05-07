@@ -1,18 +1,14 @@
 package com.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.db.ConnectionManager;
 import com.db.HibernateUtils;
+import com.entity.Classes;
 import com.entity.PageBean;
 import com.entity.Student;
 
@@ -176,10 +172,10 @@ public class StudentDaoImpl implements StudentDao{
 				hql.append("AND sage = ?");
 				hql2.append("AND sage = ?");
 			}
-			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
+/*			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
 				hql.append("AND sclass = ?");
 				hql2.append("AND sclass = ?");
-			}
+			}*/
 			Query query = session.createQuery(hql.toString());
 			Query query2 = session.createQuery(hql2.toString());
 			if(s.getSid() != null && !s.getSid().trim().equals("")) {
@@ -198,10 +194,10 @@ public class StudentDaoImpl implements StudentDao{
 				query.setParameter(i++,s.getSage());
 				query2.setParameter(k++, s.getSage());				
 			}
-			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
+/*			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
 				query.setParameter(i++,s.getSclass());
 				query2.setParameter(k++, s.getSclass());				
-			}
+			}*/
 			Long n = (Long)query2.uniqueResult();
 			int N = new Long(n).intValue();
 			pb.setTr(N);
@@ -217,5 +213,27 @@ public class StudentDaoImpl implements StudentDao{
 			}
 		}
 		return pb;
-	}	
+	}
+	public List<Classes> getClassList() {
+		Transaction tx = null;
+		List<Classes> list = null;
+		
+		try{
+			Session session = HibernateUtils.getSession();
+			tx = session.beginTransaction();
+			String hql = "from Classes c";
+			Query query = session.createQuery(hql);
+			list = query.list();
+			tx.commit();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(tx != null) {
+				tx = null;
+			}
+		}
+		return list;
+	}
 }
