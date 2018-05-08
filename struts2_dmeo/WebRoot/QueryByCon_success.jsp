@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		<td align="center"><s:property value="#stu.sname"/></td>
             		<td align="center"><s:property value="#stu.ssex"/></td>
             		<td align="center"><s:property value="#stu.sage"/></td>
-            		<td align="center"><s:property value="#stu.sclass"/></td>
+            		<td align="center"><s:property value="#stu.classes.c_name"/></td>
             		<td align="center">
             		<a href="<%=path%>/student/Student_delete.action?sid=<s:property value="#stu.sid"/>" onclick="javascript:return confirm('确定删除？');">删除</a>
             		<a href="<%=path%>/student/Student_update1.action?sid=<s:property value="#stu.sid"/>">修改</a>

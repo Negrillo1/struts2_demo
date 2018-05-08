@@ -21,6 +21,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.entity.Classes;
 import com.entity.Student;
 
 public class ExcelExportUtils{
@@ -53,7 +54,7 @@ public class ExcelExportUtils{
 		    row.createCell(1).setCellValue(student.getSname());  
 		    row.createCell(2).setCellValue(student.getSsex());
 		    row.createCell(3).setCellValue(student.getSage());
-		    row.createCell(4).setCellValue(student.getSclass());
+		    row.createCell(4).setCellValue(student.getClasses().getC_name());
 		    }
 		return wb;       
 	}
@@ -135,6 +136,7 @@ public class ExcelExportUtils{
 		XSSFSheet sheet = xssfWB.getSheetAt(0);
 		XSSFRow row;
 		Student s = new Student();
+		Classes c = new Classes(); 
 		if(sheet.getPhysicalNumberOfRows() > 0) {
 			//从Excel表格第1行开始读取
 			for(int i = 1; i<sheet.getPhysicalNumberOfRows(); i++) {
@@ -166,7 +168,8 @@ public class ExcelExportUtils{
 				s.setSname(sname);
 				s.setSsex(ssex);
 				s.setSage(sage);
-				s.setSclass(sclass);
+				c.setC_name(sclass);
+				s.setClasses(c);
 				list.add(s);
 			}
 		}else {

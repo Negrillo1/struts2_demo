@@ -172,10 +172,11 @@ public class StudentDaoImpl implements StudentDao{
 				hql.append("AND sage = ?");
 				hql2.append("AND sage = ?");
 			}
-/*			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
-				hql.append("AND sclass = ?");
-				hql2.append("AND sclass = ?");
-			}*/
+			if(s.getClasses().getId() !=null && !s.getClasses().getId().trim().equals("")) {
+				hql.append("AND class_fk = ?");
+				hql2.append("AND class_fk = ?");
+			}
+
 			Query query = session.createQuery(hql.toString());
 			Query query2 = session.createQuery(hql2.toString());
 			if(s.getSid() != null && !s.getSid().trim().equals("")) {
@@ -194,10 +195,11 @@ public class StudentDaoImpl implements StudentDao{
 				query.setParameter(i++,s.getSage());
 				query2.setParameter(k++, s.getSage());				
 			}
-/*			if(s.getSclass() !=null && !s.getSclass().trim().equals("")) {
-				query.setParameter(i++,s.getSclass());
-				query2.setParameter(k++, s.getSclass());				
-			}*/
+			if(s.getClasses().getId() !=null && !s.getClasses().getId().trim().equals("")) {
+				query.setParameter(i++, s.getClasses().getId());
+				query2.setParameter(k++, s.getClasses().getId());
+			}
+
 			Long n = (Long)query2.uniqueResult();
 			int N = new Long(n).intValue();
 			pb.setTr(N);

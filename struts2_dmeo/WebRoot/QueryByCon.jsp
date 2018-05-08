@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -82,7 +83,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <input class="easyui-textbox" name="sage" label="年龄：" labelPosition="top" data-options="prompt:'年龄'" style="width:100%;height:52px">
             </div>
 			<div class="input_container">
-                <input class="easyui-textbox" name="sclass" label="班级：" labelPosition="top" data-options="prompt:'班级'" style="width:100%;height:52px">
+              	  学院：<br/>
+                <select class="easyui-combobox" style="width: 150px;" name="sclass">
+				<option value="" selected="selected"></option>
+				<c:forEach items="${c_name_list }" var="c_name">
+					<option value="${c_name.id }">${c_name.c_name }</option>
+				</c:forEach>
+			</select>
             </div>
             <div>
                 <input type="submit" value="提交"/>

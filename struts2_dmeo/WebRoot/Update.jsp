@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -88,7 +89,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <input class="easyui-textbox" name="sage" label="年龄：" labelPosition="top" value="<s:property value="#session.update1.sage"/>" style="width:100%;height:52px">
             </div>
 			<div class="input_container">
-                <input class="easyui-textbox" name="sclass" label="班级：" labelPosition="top" value="<s:property value="#session.update1.sclass"/>" style="width:100%;height:52px">
+               	 学院：<br/>
+                <select class="easyui-combobox" style="width: 150px;" name="sclass">
+                <option value="<s:property value="#session.update1.classes.id"/>" selected="selected"><s:property value="#session.update1.classes.c_name"/></option>
+				<c:forEach items="${c_name_list }" var="c_name">
+					<option value="${c_name.id }">${c_name.c_name }</option>
+				</c:forEach>
+			</select>
             </div>
             <div>
                 <input type="submit" value="提交修改"/>

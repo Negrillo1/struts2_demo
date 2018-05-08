@@ -166,6 +166,8 @@ public class StudentAction extends SuperAction{
 		s.setSname(request.getParameter("sname"));
 		s.setSsex(request.getParameter("ssex"));
 		s.setSage(request.getParameter("sage"));
+		c.setId(request.getParameter("sclass"));
+		s.setClasses(c);
 		if(sdao.updateStudent(s)) {
 			return "update2_success";
 		}
@@ -185,6 +187,8 @@ public class StudentAction extends SuperAction{
 		s.setSsex(request.getParameter("ssex"));
 		System.out.println(request.getParameter("ssex"));
 		s.setSage(request.getParameter("sage"));
+		c.setId(request.getParameter("sclass"));
+		s.setClasses(c);
 //		s = encoding(s);
 		PageBean<Student> pb = sdao.query(s,pc,ps);
 		pb.setUrl(getUrl(request));
@@ -332,8 +336,8 @@ public class StudentAction extends SuperAction{
 						stu.setSsex(s.getSsex());
 						if(s.getSage() != null)
 						stu.setSage(s.getSage());
-/*						if(s.getSclass() != null)
-						stu.setSclass(s.getSclass());*/
+						if(s.getClasses() != null)
+						stu.setClasses(s.getClasses());
 						sdao.addStudent(stu);
 					}
 				}
