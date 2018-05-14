@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.db.HibernateUtils;
 import com.db.MyHibernateSessionFactory;
@@ -12,33 +14,22 @@ import com.entity.User;
 
 public class UserDaoImpl implements UserDao{
 
+	private HibernateTemplate hibernateTemplate;
+	
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
+	}
+	@SuppressWarnings("all")
+	@Transactional
 	public User login(User user) {
 		// TODO Auto-generated method stub
-		Transaction tx = null;
-		String hql = "";
-		try{
 
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			hql = "from User where username = ? and password = ?";
-			Query query = session.createQuery(hql);
-			query.setParameter(0, user.getUsername());
-			query.setParameter(1, user.getPassword());
-			List list = query.list();
-			tx.commit();
-			if(list.size() > 0) {
-				User uu = (User) list.get(0);
-				return uu;
+			List <User> list = (List<User>) hibernateTemplate.
+					find("from User where username = ? and password = ?", user.getUsername(),user.getPassword());
+			if(list != null && list.size() != 0) {
+				User u = (User) list.get(0);
+				return u;
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally{
-
-			if (tx != null) {
-				tx = null;
-			}
-		}
 		return null;
 	}
 

@@ -12,15 +12,24 @@ import utils.VerifyCode;
 import com.dao.UserDao;
 import com.dao.UserDaoImpl;
 import com.entity.User;
-
-import freemarker.template.utility.StringUtil;
+import com.service.UserService;
 
 public class UserAction extends SuperAction{
 
 	private String username;
 	private String password;
 	private String verifycode;
+	private VerifyCode vc;
+	private UserDao userDao;
 	
+	
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
+	public void setVc(VerifyCode vc) {
+		this.vc = vc;
+	}
 
 	public String getUsername() {
 		return username;
@@ -66,7 +75,7 @@ public class UserAction extends SuperAction{
 		}
 		if(codeSession.equalsIgnoreCase(verifycode)) {
 			//验证用户名和密码
-			UserDao userDao = new UserDaoImpl();
+//			UserDao userDao = new UserDaoImpl();
 			User u = userDao.login(user);
 			if(u!=null) {
 				session.setAttribute("user", user.getUsername());
@@ -89,8 +98,9 @@ public class UserAction extends SuperAction{
 		response.setHeader("Expires", "-1");
 		response.setHeader("Cache-Control", "no-cache");
 		response.setHeader("Pragma", "-1"); 
-		VerifyCode vc = VerifyCode.Instance();
+		vc = VerifyCode.Instance();
 		String code = vc.getString();
+		System.out.println(code);
 		session.setAttribute("code", code);
 		ImageIO.write(vc.getImage(),"jpg", response.getOutputStream());
 	}
