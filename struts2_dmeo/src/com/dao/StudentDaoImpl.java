@@ -1,11 +1,17 @@
 package com.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.orm.hibernate5.HibernateCallback;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import com.db.HibernateUtils;
 import com.entity.Classes;
@@ -13,147 +19,94 @@ import com.entity.PageBean;
 import com.entity.Student;
 
 public class StudentDaoImpl implements StudentDao{
-
-	public List<Student> queryAll() {
-		List<Student> list = null;
-		Transaction tx = null;
-		try{
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			String hql = "from Student";
-			Query query = session.createQuery(hql);
-			list = query.list();
-			tx.commit();
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+	
+	private HibernateTemplate hibernateTemplate;
+	
+	
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
 	}
-	public PageBean<Student> queryAll(int pc,int ps) {
-		// TODO 查询所有学生信息		
+	@SuppressWarnings("all")
+	@Transactional
+	public List<Student> queryAll() {
+		List<Student> list = (List<Student>) hibernateTemplate.find("from Student");			
+		if(list != null && list.size() != 0) {
+			return list;
+		}
+		return null;
+	}
+	@SuppressWarnings("all")
+	@Transactional
+	public PageBean<Student> queryAll(final int pc,final int ps) {
+		// TODO 查询所有学生信息	
 		PageBean<Student> pb = new PageBean<Student>();
 		List<Student> list=null;
-		Transaction tx = null;
-		try {
-			Session session = HibernateUtils.getSession();
-			pb.setPc(pc);
-			pb.setPs(ps);
-			tx = session.beginTransaction();
+		
+		pb.setPc(pc);
+		pb.setPs(ps);
+		
 			//得到tr
-			String hql = "select count(*) from Student";
-			Long n = (Long) session.createQuery(hql).uniqueResult();
-			int N = new Long(n).intValue();
-			pb.setTr(N);
-			hql = "from Student";
-			Query query2 = session.createQuery(hql);
-			list = query2.setFirstResult((pc - 1)*ps).setMaxResults(ps).list();
-			pb.setBeanList(list);
-			tx.commit();			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
+		String hql = "select count(*) from Student";
+		Long count = (Long)hibernateTemplate.find(hql).listIterator().next();
+		int c = count.intValue();
+		pb.setTr(c);
+		final String hql2 = "from Student";
+		list = hibernateTemplate.execute(new HibernateCallback(){
+		public Object doInHibernate(Session session) throws HibernateException{
+			Query query = session.createQuery(hql2);
+			query.setFirstResult((pc - 1)*ps);
+			query.setMaxResults(ps);
+			List list = query.list();
+			return list;
 		}
+	});
+		pb.setBeanList(list); 
 		return pb;
 	}
-
+	
+	@Transactional
 	public Student queryById(int id) {
 		// TODO 按照学号查询
-		Transaction tx = null;
+	
 		Student s = new Student();
-		try {
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			s = session.get(Student.class, id);
-			tx.commit();
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
-		}
+		s = hibernateTemplate.get(Student.class, id);
 		return s;
 	}
-
+	@Transactional
 	public boolean deleteStudent(int id) {
 		// TODO 删除学生信息
-		Transaction tx = null;
-		try{
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			Student s = session.get(Student.class, id);
+			Student s = hibernateTemplate.get(Student.class, id);
 			if(s != null) {
-				session.delete(s);
-				tx.commit();
+				hibernateTemplate.delete(s);
 				return true;
-			} else {
-				return false;
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
-		}
 		return false;
 	}
-
+	@Transactional
 	public boolean addStudent(Student s) {
 		// TODO 添加学生信息
-		Transaction tx = null;
-		try{
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			session.save(s);
-			tx.commit();
+			hibernateTemplate.save(s);
 			return true;
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
-		}
-		return false;
 	}
-
+	@Transactional
 	public boolean updateStudent(Student s) {
-		// TODO 更新学生信息
-		Transaction tx = null;
-		try{
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			session.update(s);
-			tx.commit();
+		// TODO 更新学生信息	
+			hibernateTemplate.update(s);
 			return true;
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
-		}
-		return false;
 	}
-
-	public PageBean<Student> query(Student s ,int pc,int ps) {
+	@SuppressWarnings("all")
+	@Transactional
+	public PageBean<Student> query(Student s ,final int pc,final int ps) {
 		// TODO Auto-generated method stub
-		Transaction tx = null;
+		final ArrayList<String> tiaojian = new ArrayList<String>();
+		ArrayList<String> tiaojian2 = new ArrayList<String>();
 		List<Student> list = new ArrayList<Student>();
 		PageBean<Student> pb = new PageBean<Student>();
 		int i = 0;
 		int k = 0;
 		pb.setPc(pc);
 		pb.setPs(ps);
-		try {
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			StringBuilder hql = new StringBuilder("FROM Student WHERE 1=1 ");
+			final StringBuilder hql = new StringBuilder("FROM Student WHERE 1=1 ");
 			StringBuilder hql2 = new StringBuilder("SELECT count(*) from Student where 1=1 ");
 			if(s.getSid() != null && !s.getSid().trim().equals("")) {
 				hql.append("AND sid = ?");
@@ -177,65 +130,60 @@ public class StudentDaoImpl implements StudentDao{
 				hql2.append("AND class_fk = ?");
 			}
 
-			Query query = session.createQuery(hql.toString());
-			Query query2 = session.createQuery(hql2.toString());
+			
+			
 			if(s.getSid() != null && !s.getSid().trim().equals("")) {
-				query.setParameter(i++,s.getSid());
-				query2.setParameter(k++, s.getSid());
+				tiaojian.add(s.getSid());
 			}
 			if(s.getSname() != null && !s.getSname().trim().equals("")) {
-				query.setParameter(i++,s.getSname());
-				query2.setParameter(k++, s.getSname());	
+				tiaojian.add(s.getSname());
+				
+//				query2.setParameter(k++, s.getSname());	
 			}
 			if(s.getSsex() !=null && !s.getSsex().trim().equals("")) {
-				query.setParameter(i++,s.getSsex());
-				query2.setParameter(k++, s.getSsex());	
+				tiaojian.add(s.getSsex());
+				
+//				query2.setParameter(k++, s.getSsex());	
 			}
 			if(s.getSage() !=null && !s.getSage().trim().equals("")) {
-				query.setParameter(i++,s.getSage());
-				query2.setParameter(k++, s.getSage());				
+				tiaojian.add(s.getSage());
+				
+//				query2.setParameter(k++, s.getSage());				
 			}
 			if(s.getClasses().getId() !=null && !s.getClasses().getId().trim().equals("")) {
-				query.setParameter(i++, s.getClasses().getId());
-				query2.setParameter(k++, s.getClasses().getId());
+				tiaojian.add(s.getClasses().getId());
+//				query2.setParameter(k++, s.getClasses().getId());
 			}
-
-			Long n = (Long)query2.uniqueResult();
-			int N = new Long(n).intValue();
+			int size = tiaojian.size();
+			String[] tj = tiaojian.toArray(new String[size]);
+			Long count = (Long) hibernateTemplate.find(hql2.toString(),tj).listIterator().next();
+			int N = new Long(count).intValue();
 			pb.setTr(N);
-			list = query.setFirstResult((pc - 1)*ps).setMaxResults(ps).list();
-			tx.commit();
+			list = hibernateTemplate.execute(new HibernateCallback() {
+				public Object doInHibernate(Session session) throws HibernateException {
+							Query query = session.createQuery(hql.toString());
+							for(int i = 0; i< tiaojian.size(); i++) {
+								query.setParameter(i,tiaojian.get(i).toString());
+							}
+							query.setFirstResult((pc - 1)*ps);
+							query.setMaxResults(ps);
+							List list = query.list();
+							return list;
+				}
+			});
 			pb.setBeanList(list);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (tx != null) {
-				tx = null;
-			}
-		}
 		return pb;
 	}
+	@SuppressWarnings("all")
+	@Transactional
 	public List<Classes> getClassList() {
-		Transaction tx = null;
 		List<Classes> list = null;
 		
-		try{
-			Session session = HibernateUtils.getSession();
-			tx = session.beginTransaction();
-			String hql = "from Classes c";
-			Query query = session.createQuery(hql);
-			list = query.list();
-			tx.commit();
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if(tx != null) {
-				tx = null;
-			}
+		String hql = "from Classes c";
+		list = (List<Classes>) hibernateTemplate.find(hql);
+		if(list != null && list.size() != 0) {
+			return list;
 		}
-		return list;
+		return null;
 	}
 }

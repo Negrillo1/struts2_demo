@@ -14,17 +14,17 @@
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
         
         
-        
+        <context:property-placeholder location="classpath:jdbc.properties"/>
         <!-- 配置数据库连接池 -->
        	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
        		<!-- 驱动类全称 -->
-       		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+       		<property name="driverClass" value="${jdbc.driver}"></property>
        		<!-- 数据库的url地址 -->
-       		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/struts2_demo"></property>
+       		<property name="jdbcUrl" value="${jdbc.url}"></property>
        		<!-- 用户名 -->
-       		<property name="user" value="root"></property>
+       		<property name="user" value="${jdbc.username}"></property>
        		<!-- 密码 -->
-       		<property name="password" value="88898825"></property>
+       		<property name="password" value="${jdbc.password}"></property>
        	</bean>
        	<!-- 配置Hibernate的sessionFactory -->
        	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -56,4 +56,21 @@
        		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
        	</bean>
        	
+       	<!-- studentBean -->
+       	<bean id="studentAction" class="com.action.StudentAction" scope="prototype">
+       		<property name="excelExportUtils" ref="excelExportUtils"></property>
+       		<property name="s" ref="s"></property>
+       		<property name="c" ref="c"></property>
+       		<property name="sdao" ref="sdao"></property>
+       	</bean>
+       	<!-- 导出工具类的bean -->
+       	<bean id="excelExportUtils" class="utils.ExcelExportUtils"></bean>
+       	<!-- Student类的bean -->
+       	<bean id="s" class="com.entity.Student"></bean>
+       	<!-- Classes类的bean -->
+       	<bean id="c" class="com.entity.Classes"></bean>
+
+       	<bean id="sdao" class="com.dao.StudentDaoImpl">
+       		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
+       	</bean>
 </beans>

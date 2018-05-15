@@ -25,20 +25,29 @@ import com.opensymphony.xwork2.ActionContext;
 
 public class StudentAction extends SuperAction{
 
-	private ExcelExportUtils excelExportUtils = new ExcelExportUtils();
+	private ExcelExportUtils excelExportUtils ;
 	private int id;
 	private Student s;
-	private Classes c = new Classes();
+	private Classes c;
 	private File file;
-	public File getFile() {
-		return file;
+	private StudentDao sdao;
+	
+	public void setSdao(StudentDao sdao) {
+		this.sdao = sdao;
 	}
+
+	public void setExcelExportUtils(ExcelExportUtils excelExportUtils) {
+		this.excelExportUtils = excelExportUtils;
+	}
+
+	public void setC(Classes c) {
+		this.c = c;
+	}
+
 	public void setFile(File file) {
 		this.file = file;
 	}
-	public Student getS() {
-		return s;
-	}
+	
 	public void setS(Student s) {
 		this.s = s;
 	}
@@ -88,7 +97,6 @@ public class StudentAction extends SuperAction{
 	public String queryAll() {
 		int pc = getPc(request);
 		int ps = 3;
-		StudentDao sdao = new StudentDaoImpl();
 		PageBean<Student> pb = sdao.queryAll(pc,ps);
 		session.setAttribute("pb", pb);
 		
@@ -98,7 +106,6 @@ public class StudentAction extends SuperAction{
 	 * 按学号查询
 	 */
 	public String queryById() {
-		StudentDao sdao = new StudentDaoImpl();
 		Student s = sdao.queryById(id);
 		if(s !=null) {
 			session.setAttribute("queryById_list", s);
@@ -112,7 +119,7 @@ public class StudentAction extends SuperAction{
 	 * 删除学生信息
 	 */
 	public String delete() {
-		StudentDao sdao = new StudentDaoImpl();
+		sdao = new StudentDaoImpl();
 		int sid = Integer.parseInt(request.getParameter("id").toString());
 		if(sid > 0) {
 			if(sdao.deleteStudent(sid)){
@@ -134,7 +141,6 @@ public class StudentAction extends SuperAction{
 		s.setSage(request.getParameter("sage"));
 		c.setId(request.getParameter("sclass"));
 		s.setClasses(c);
-		StudentDao sdao = new StudentDaoImpl();
 		if(sdao.addStudent(s)) {
 			return "add_success";
 		}
@@ -180,7 +186,6 @@ public class StudentAction extends SuperAction{
 		response.setContentType("text/html;charset=utf-8");
 		int pc = getPc(request);
 		int ps = 3;
-		StudentDao sdao = new StudentDaoImpl();
 		Student s = new Student();
 		s.setSid(request.getParameter("sid"));
 		s.setSname(request.getParameter("sname"));
@@ -350,9 +355,8 @@ public class StudentAction extends SuperAction{
 		return "import_success";
 	}
 	public String AddStudent() {
-		
-		StudentDao dao = new StudentDaoImpl();
-		List<Classes> list = dao.getClassList();
+
+		List<Classes> list = sdao.getClassList();
 		session.setAttribute("c_name_list", list);
 		return "AddStudent";
 	}

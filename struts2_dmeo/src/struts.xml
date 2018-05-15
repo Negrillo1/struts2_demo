@@ -20,7 +20,7 @@
 		<interceptor-ref name="defaultStack"></interceptor-ref>
 	</interceptor-stack>
 	</interceptors>
-		<action name="*_*" class="com.action.{1}Action" method="{2}">
+		<action name="Student_*" class="studentAction" method="{1}">
 			<result name="noLogin">/NoLogin.jsp</result>	
 			<result name="query_success">/QueryAll.jsp</result>
 			<result name="delete_success" type="chain">Student_queryAll</result>
