@@ -45,32 +45,35 @@
        	</bean>
        	<!-- 开启事物注解 -->
        	<tx:annotation-driven transaction-manager="transactionManager"/>
+       	<!-- 配置包扫描器 -->
+       	<context:component-scan base-package="com.action"></context:component-scan>
        	<!-- 配置action对象 -->
-       	
-       	<bean id="userAction" class="com.action.UserAction" scope="prototype">
+       	<context:component-scan base-package="com.dao"></context:component-scan>
+       	<context:component-scan base-package="com.entity"></context:component-scan>
+<!--        	<bean id="userAction" class="com.action.UserAction" scope="prototype">
        		<property name="vc" ref="vc"></property>
        		<property name="userDao" ref="userDao"></property>
-       	</bean>
-       	<bean id="vc" class="utils.VerifyCode"></bean>
+       	</bean> -->
+<!--        	
        	<bean id="userDao" class="com.dao.UserDaoImpl">
        		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
-       	</bean>
+       	</bean> -->
        	
        	<!-- studentBean -->
-       	<bean id="studentAction" class="com.action.StudentAction" scope="prototype">
+<!--        	<bean id="studentAction" class="com.action.StudentAction" scope="prototype">
        		<property name="excelExportUtils" ref="excelExportUtils"></property>
        		<property name="s" ref="s"></property>
        		<property name="c" ref="c"></property>
        		<property name="sdao" ref="sdao"></property>
-       	</bean>
+       	</bean> -->
        	<!-- 导出工具类的bean -->
-       	<bean id="excelExportUtils" class="utils.ExcelExportUtils"></bean>
-       	<!-- Student类的bean -->
+       	<!-- <bean id="excelExportUtils" class="utils.ExcelExportUtils"></bean>
+       	Student类的bean
        	<bean id="s" class="com.entity.Student"></bean>
-       	<!-- Classes类的bean -->
-       	<bean id="c" class="com.entity.Classes"></bean>
+       	Classes类的bean
+       	<bean id="c" class="com.entity.Classes"></bean> -->
 
-       	<bean id="sdao" class="com.dao.StudentDaoImpl">
+<!--        	<bean id="sdao" class="com.dao.StudentDaoImpl">
        		<property name="hibernateTemplate" ref="hibernateTemplate"></property>
-       	</bean>
+       	</bean> -->
 </beans>

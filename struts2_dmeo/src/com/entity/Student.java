@@ -1,9 +1,12 @@
 package com.entity;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * @author 林敬凯 2018/4/15
  *
  */
+@Repository
 public class Student {
 
 	private int id;

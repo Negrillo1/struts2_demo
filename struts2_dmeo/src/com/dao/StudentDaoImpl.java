@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,21 +13,18 @@ import org.hibernate.Transaction;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.db.HibernateUtils;
 import com.entity.Classes;
 import com.entity.PageBean;
 import com.entity.Student;
-
+@Repository(value = "sdao")
 public class StudentDaoImpl implements StudentDao{
-	
+	@Resource(name = "hibernateTemplate")
 	private HibernateTemplate hibernateTemplate;
 	
-	
-	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-		this.hibernateTemplate = hibernateTemplate;
-	}
 	@SuppressWarnings("all")
 	@Transactional
 	public List<Student> queryAll() {
@@ -68,9 +67,12 @@ public class StudentDaoImpl implements StudentDao{
 	public Student queryById(int id) {
 		// TODO 按照学号查询
 	
-		Student s = new Student();
-		s = hibernateTemplate.get(Student.class, id);
-		return s;
+		String hql = "from Student where id = ?";
+		Student s = hibernateTemplate.get(Student.class, id);
+		if(s !=null) {
+			return s;
+		}
+		return null;
 	}
 	@Transactional
 	public boolean deleteStudent(int id) {

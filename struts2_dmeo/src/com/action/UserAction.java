@@ -3,9 +3,12 @@ package com.action;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.xwork.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import utils.VerifyCode;
 
@@ -13,24 +16,17 @@ import com.dao.UserDao;
 import com.dao.UserDaoImpl;
 import com.entity.User;
 import com.service.UserService;
-
+@Controller
+@Scope(value ="prototype")
 public class UserAction extends SuperAction{
 
 	private String username;
 	private String password;
 	private String verifycode;
 	private VerifyCode vc;
+	@Resource(name = "userDao")
 	private UserDao userDao;
 	
-	
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
-	public void setVc(VerifyCode vc) {
-		this.vc = vc;
-	}
-
 	public String getUsername() {
 		return username;
 	}

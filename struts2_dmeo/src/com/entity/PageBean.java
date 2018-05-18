@@ -1,12 +1,15 @@
 package com.entity;
 
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
 /**
  * 
  * @author 林敬凯  2018/4/16
  *
  * @param <T>
  */
+@Repository
 public class PageBean<T> {
 
 	private int pc;//当前页码

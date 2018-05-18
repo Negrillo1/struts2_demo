@@ -7,11 +7,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.ServletActionContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import utils.ExcelExportUtils;
 
@@ -21,36 +24,20 @@ import com.entity.Classes;
 import com.entity.PageBean;
 import com.entity.Student;
 import com.opensymphony.xwork2.ActionContext;
-
-
+@Controller
+@Scope(value = "prototype")
 public class StudentAction extends SuperAction{
 
-	private ExcelExportUtils excelExportUtils ;
+	private ExcelExportUtils excelExportUtils = new ExcelExportUtils();
 	private int id;
-	private Student s;
-	private Classes c;
 	private File file;
+	@Resource(name = "sdao")
 	private StudentDao sdao;
-	
-	public void setSdao(StudentDao sdao) {
-		this.sdao = sdao;
-	}
-
-	public void setExcelExportUtils(ExcelExportUtils excelExportUtils) {
-		this.excelExportUtils = excelExportUtils;
-	}
-
-	public void setC(Classes c) {
-		this.c = c;
-	}
-
+		
 	public void setFile(File file) {
 		this.file = file;
 	}
 	
-	public void setS(Student s) {
-		this.s = s;
-	}
 	public int getId() {
 		return id;
 	}
@@ -119,7 +106,7 @@ public class StudentAction extends SuperAction{
 	 * 删除学生信息
 	 */
 	public String delete() {
-		sdao = new StudentDaoImpl();
+		
 		int sid = Integer.parseInt(request.getParameter("id").toString());
 		if(sid > 0) {
 			if(sdao.deleteStudent(sid)){
@@ -131,10 +118,11 @@ public class StudentAction extends SuperAction{
 		
 	}
 	/*
-	 * 添加学生信息
+	 * 添加学生信息 
 	 */
 	public String add() {
 		Student s = new Student();
+		Classes c = new Classes();
 		s.setSid(request.getParameter("sid"));
 		s.setSname(request.getParameter("sname"));
 		s.setSsex(request.getParameter("ssex"));
@@ -150,7 +138,6 @@ public class StudentAction extends SuperAction{
 	 * 更新——查询出成绩
 	 */
 	public String update1() {
-		StudentDao sdao = new StudentDaoImpl();
 		int sid = Integer.parseInt(request.getParameter("id").toString());
 		Student s = sdao.queryById(sid);
 		session.setAttribute("id", s.getId());
@@ -164,8 +151,8 @@ public class StudentAction extends SuperAction{
 	 * 更新——保存更改后的数据
 	 */
 	public String update2() {
-		StudentDao sdao = new StudentDaoImpl();
 		Student s = new Student();
+		Classes c = new Classes();
 		int id = Integer.parseInt(session.getAttribute("id").toString());
 		s.setId(id);
 		s.setSid(request.getParameter("sid"));
@@ -187,6 +174,7 @@ public class StudentAction extends SuperAction{
 		int pc = getPc(request);
 		int ps = 3;
 		Student s = new Student();
+		Classes c = new Classes();
 		s.setSid(request.getParameter("sid"));
 		s.setSname(request.getParameter("sname"));
 		s.setSsex(request.getParameter("ssex"));
@@ -254,7 +242,7 @@ public class StudentAction extends SuperAction{
 	 * @throws Exception
 	 */
 	public void exportExcelAll() throws Exception {
-		StudentDao sdao = new StudentDaoImpl();
+		
 		List<Student> list = sdao.queryAll();
 		HSSFWorkbook wb = excelExportUtils.export(list);
 		response.setContentType("application/vnd.ms-excel");
@@ -282,7 +270,6 @@ public class StudentAction extends SuperAction{
 	 * @return
 	 */
 	public String importExcel() {
-		StudentDao sdao = new StudentDaoImpl();
 		//得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
 		String savePath = ServletActionContext.getServletContext().getRealPath("/excel");
 		String FileName = request.getParameter("FileName");

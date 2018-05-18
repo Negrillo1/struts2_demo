@@ -2,23 +2,24 @@ package com.dao;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.db.HibernateUtils;
 import com.db.MyHibernateSessionFactory;
 import com.entity.User;
-
+@Repository(value = "userDao")
 public class UserDaoImpl implements UserDao{
 
+	@Resource(name = "hibernateTemplate")
 	private HibernateTemplate hibernateTemplate;
 	
-	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-		this.hibernateTemplate = hibernateTemplate;
-	}
 	@SuppressWarnings("all")
 	@Transactional
 	public User login(User user) {
